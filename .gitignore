@@ -1,0 +1,78 @@
+# === Node / npm ===
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# === Build output SPFx ===
+lib/
+lib-commonjs/
+dist/
+temp/
+release/
+*.tgz
+
+# === SPFx solution output ===
+sharepoint/solution/*.sppkg
+sharepoint/solution/debug/
+!sharepoint/solution/.gitkeep
+
+# === Heft / Rushstack ===
+.heft/
+.rush/
+heft-temp/
+
+# === TypeScript ===
+*.tsbuildinfo
+.tsc-cache/
+
+# === Jest / tests ===
+coverage/
+jest-output/
+.nyc_output/
+
+# === IDE ===
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/launch.json
+.idea/
+*.swp
+*.swo
+
+# === OS ===
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# === Logs locales ===
+*.log
+build-full.log
+sass-warnings.log
+
+# === Certificados dev locales ===
+*.pem
+*.key
+*.crt
+.cert/
+
+# === Env / secretos ===
+.env
+.env.local
+.env.*.local
+config/*.local.json
+
+# === Claude Code ===
+.claude/settings.local.json
+.claude/memory/
+.claude/history/
+.claude/.cache/
+CLAUDE.local.md
+
+# === SharePoint temp ===
+.yo-rc.json.bak
+release.json
+
+# === Certificados SPFx dev ===
+~/.rushstack/

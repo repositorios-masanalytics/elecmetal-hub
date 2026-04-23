@@ -1,0 +1,14 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "isCreatingSolution": true,
+    "environment": "spo",
+    "version": "1.22.2",
+    "libraryName": "mi-primer-spfx",
+    "libraryId": "7394df5e-1f37-4d16-b0da-a076dec7ff24",
+    "packageManager": "npm",
+    "isDomainIsolated": false,
+    "componentType": "webpart",
+    "useGulp": false,
+    "nodeVersion": "22.22.0"
+  }
+}

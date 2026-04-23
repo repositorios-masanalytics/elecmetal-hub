@@ -1,0 +1,169 @@
+// ─── Tokens de color (se alinean al Header existente) ──────────────────────────
+$sidebar-bg:            #1b3a6b;
+$sidebar-text:          #dce8fa;
+$sidebar-icon-color:    #c8d8f0;
+$sidebar-hover-bg:      #254d8f;
+$sidebar-pressed-bg:    #1a2e52;
+$sidebar-active-accent: #c8d8f0;
+$sidebar-divider:       rgba(255, 255, 255, 0.10);
+
+$width-expanded:        240px;
+$width-collapsed:       48px;   // altura del toggle y de cada ítem también
+$transition-dur:        0.25s;
+$transition-ease:       ease-in-out;
+
+
+// ─── Shell del app ──────────────────────────────────────────────────────────────
+//
+//   Aplicar .appShell al contenedor raíz (HelloWorld.tsx) para habilitar el
+//   layout de dos columnas: sidebar fijo + contenido principal flexible.
+//
+.appShell {
+  display: flex;
+  // 48px = altura del Header; el resto del viewport queda para sidebar + contenido
+  height: calc(100vh - 48px);
+  overflow: hidden;
+}
+
+//   Contenedor del contenido principal: ocupa todo el espacio restante.
+.mainContent {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  min-width: 0;           // Evita desbordamiento horizontal en flex
+  overflow: hidden;       // El embed de Power BI maneja su propio scroll interno
+  background-color: #f4f6f8;
+
+  // La clase global que powerbi-client-react aplica al iframe
+  :global(.powerbi-report-container) {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+}
+
+
+// ─── Sidebar ────────────────────────────────────────────────────────────────────
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  background-color: $sidebar-bg;
+  overflow: hidden;               // Recorta etiquetas y Persona al colapsar
+  transition: width $transition-dur $transition-ease;
+}
+
+.expanded {
+  width: $width-expanded;
+}
+
+.collapsed {
+  width: $width-collapsed;
+}
+
+
+// ─── Botón toggle (hamburger / chevron) ─────────────────────────────────────────
+
+.toggleBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 100%;
+  height: $width-collapsed;      // 48 px cuadrado
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid $sidebar-divider;
+  color: $sidebar-icon-color;
+  cursor: pointer;
+  outline: none;
+
+  i { font-size: 16px; }
+
+  &:hover        { background-color: $sidebar-hover-bg; }
+  &:active       { background-color: $sidebar-pressed-bg; }
+  &:focus-visible { box-shadow: inset 0 0 0 2px $sidebar-active-accent; }
+}
+
+
+// ─── Lista de navegación ────────────────────────────────────────────────────────
+
+.navList {
+  flex: 0 0 auto;
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: $width-collapsed;     // 48 px de alto por ítem
+  padding: 0;
+  background: transparent;
+  border: none;
+  color: $sidebar-text;
+  cursor: pointer;
+  text-align: left;
+  white-space: nowrap;
+  outline: none;
+
+  &:hover        { background-color: $sidebar-hover-bg; }
+  &:active       { background-color: $sidebar-pressed-bg; }
+  &:focus-visible { box-shadow: inset 0 0 0 2px $sidebar-active-accent; }
+}
+
+.navItemActive {
+  background-color: rgba(200, 216, 240, 0.12);
+  border-left: 3px solid $sidebar-active-accent;
+
+  .navIcon { color: $sidebar-active-accent; }
+}
+
+
+// ─── Ícono del ítem ─────────────────────────────────────────────────────────────
+
+.navIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: $width-collapsed;      // 48 px, siempre visible (no transiciona)
+  color: $sidebar-icon-color;
+  font-size: 16px;
+}
+
+
+// ─── Etiqueta del ítem ──────────────────────────────────────────────────────────
+//
+//   La etiqueta se desvanece con opacity al colapsar.
+//   El overflow:hidden del .sidebar se encarga de recortarla físicamente.
+
+.navLabel {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 400;
+  opacity: 1;
+  transition: opacity $transition-dur $transition-ease;
+}
+
+.sidebar.collapsed .navLabel {
+  opacity: 0;
+}
+
+
+// ─── Sección del avatar (Persona) ───────────────────────────────────────────────
+
+.avatarSection {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding: 10px 8px;
+  min-height: $width-collapsed + 4px;   // 52 px
+  border-top: 1px solid $sidebar-divider;
+  overflow: hidden;
+}
