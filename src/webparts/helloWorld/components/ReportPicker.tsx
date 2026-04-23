@@ -7,14 +7,14 @@ import {
   ChevronDown20Regular,
 } from '@fluentui/react-icons';
 import {
-  PowerBIService,
   IPowerBIReport,
   IPowerBIGroup,
   PowerBIConsentMissingError,
 } from '../services/PowerBIService';
+import { IPowerBIDataService } from '../services/EmbedTokenService';
 
 export interface IReportPickerProps {
-  service:  PowerBIService;
+  service:  IPowerBIDataService;
   onSelect: (report: IPowerBIReport) => void;
 }
 
