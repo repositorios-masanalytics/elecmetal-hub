@@ -1,8 +1,11 @@
 import * as React from 'react';
-import { GroupedList, IGroup } from 'office-ui-fabric-react/lib/GroupedList';
-import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { Text } from 'office-ui-fabric-react/lib/Text';
+import { Spinner } from '@fluentui/react-components';
+import {
+  DataBarVertical20Regular,
+  ErrorCircle20Regular,
+  ChevronRight20Regular,
+  ChevronDown20Regular,
+} from '@fluentui/react-icons';
 import {
   PowerBIService,
   IPowerBIReport,
@@ -13,6 +16,14 @@ import {
 export interface IReportPickerProps {
   service:  PowerBIService;
   onSelect: (report: IPowerBIReport) => void;
+}
+
+interface IGroup {
+  key:         string;
+  name:        string;
+  startIndex:  number;
+  count:       number;
+  isCollapsed: boolean;
 }
 
 interface IReportPickerState {
@@ -89,33 +100,10 @@ export default class ReportPicker extends React.Component<IReportPickerProps, IR
     }
   }
 
-  private _renderCell = (_depth: number | undefined, item?: IPowerBIReport): React.ReactNode => {
-    if (!item) return null;
-    return (
-      <button
-        onClick={() => this.props.onSelect(item)}
-        title={item.name}
-        style={{
-          display:        'flex',
-          alignItems:     'center',
-          gap:            8,
-          width:          '100%',
-          padding:        '8px 12px 8px 20px',
-          background:     'transparent',
-          border:         'none',
-          color:          '#dce8fa',
-          cursor:         'pointer',
-          textAlign:      'left',
-          fontSize:       14,
-          boxSizing:      'border-box',
-        }}
-      >
-        <Icon iconName="BarChart4" style={{ color: '#a8c0e0', flexShrink: 0 }} />
-        <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-          {item.name}
-        </span>
-      </button>
-    );
+  private _toggleGroup = (key: string): void => {
+    this.setState(prev => ({
+      groups: prev.groups.map(g => g.key === key ? { ...g, isCollapsed: !g.isCollapsed } : g),
+    }));
   }
 
   public render(): React.ReactElement<IReportPickerProps> {
@@ -123,13 +111,9 @@ export default class ReportPicker extends React.Component<IReportPickerProps, IR
 
     if (status === 'loading') {
       return (
-        <div style={{ padding: 16 }}>
-          <Spinner
-            size={SpinnerSize.small}
-            label="Cargando reportes..."
-            labelPosition="right"
-            styles={{ label: { color: '#a8c0e0' }, circle: { borderTopColor: '#a8c0e0' } }}
-          />
+        <div style={{ padding: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
+          <Spinner size="tiny" />
+          <span style={{ color: '#a8c0e0', fontSize: 13 }}>Cargando reportes...</span>
         </div>
       );
     }
@@ -138,13 +122,13 @@ export default class ReportPicker extends React.Component<IReportPickerProps, IR
       return (
         <div style={{ padding: '12px 8px' }}>
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: 6, marginBottom: 8 }}>
-            <Icon iconName="Error" style={{ color: '#ffa07a', marginTop: 2, flexShrink: 0 }} />
-            <Text style={{ color: '#ffa07a', fontSize: 13 }}>{errorMessage}</Text>
+            <ErrorCircle20Regular style={{ color: '#ffa07a', marginTop: 2, flexShrink: 0 }} />
+            <span style={{ color: '#ffa07a', fontSize: 13 }}>{errorMessage}</span>
           </div>
           {isConsentError && (
-            <Text style={{ color: '#a8c0e0', fontSize: 12, display: 'block', paddingLeft: 20 }}>
+            <span style={{ color: '#a8c0e0', fontSize: 12, display: 'block', paddingLeft: 20 }}>
               Pasos: SharePoint Admin Center → API Access → aprobar "Power BI Service / Report.Read.All"
-            </Text>
+            </span>
           )}
         </div>
       );
@@ -160,43 +144,65 @@ export default class ReportPicker extends React.Component<IReportPickerProps, IR
 
     return (
       <div style={{ overflowY: 'auto', flex: 1 }}>
-        <GroupedList
-          items={items}
-          groups={groups}
-          onRenderCell={this._renderCell}
-          compact={true}
-          groupProps={{
-            onRenderHeader: (props) => {
-              if (!props || !props.group) return null;
-              const { group, onToggleCollapse } = props;
-              return (
+        {groups.map(group => {
+          const groupItems = items.slice(group.startIndex, group.startIndex + group.count);
+          return (
+            <div key={group.key}>
+              <button
+                onClick={() => this._toggleGroup(group.key)}
+                style={{
+                  display:       'flex',
+                  alignItems:    'center',
+                  gap:           8,
+                  width:         '100%',
+                  padding:       '6px 12px',
+                  background:    'rgba(255,255,255,0.07)',
+                  border:        'none',
+                  borderBottom:  '1px solid rgba(255,255,255,0.05)',
+                  color:         '#a8c0e0',
+                  cursor:        'pointer',
+                  fontSize:      11,
+                  fontWeight:    600,
+                  textTransform: 'uppercase' as 'uppercase',
+                  letterSpacing: '0.06em',
+                  boxSizing:     'border-box' as 'border-box',
+                }}
+              >
+                {group.isCollapsed
+                  ? <ChevronRight20Regular style={{ fontSize: 10 }} />
+                  : <ChevronDown20Regular style={{ fontSize: 10 }} />
+                }
+                {group.name}
+              </button>
+              {!group.isCollapsed && groupItems.map(item => (
                 <button
-                  onClick={() => onToggleCollapse && onToggleCollapse(group)}
+                  key={item.id}
+                  onClick={() => this.props.onSelect(item)}
+                  title={item.name}
                   style={{
-                    display:       'flex',
-                    alignItems:    'center',
-                    gap:           8,
-                    width:         '100%',
-                    padding:       '6px 12px',
-                    background:    'rgba(255,255,255,0.07)',
-                    border:        'none',
-                    borderBottom:  '1px solid rgba(255,255,255,0.05)',
-                    color:         '#a8c0e0',
-                    cursor:        'pointer',
-                    fontSize:      11,
-                    fontWeight:    600,
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.06em',
-                    boxSizing:     'border-box',
+                    display:    'flex',
+                    alignItems: 'center',
+                    gap:        8,
+                    width:      '100%',
+                    padding:    '8px 12px 8px 20px',
+                    background: 'transparent',
+                    border:     'none',
+                    color:      '#dce8fa',
+                    cursor:     'pointer',
+                    textAlign:  'left' as 'left',
+                    fontSize:   14,
+                    boxSizing:  'border-box' as 'border-box',
                   }}
                 >
-                  <Icon iconName={group.isCollapsed ? 'ChevronRight' : 'ChevronDown'} style={{ fontSize: 10 }} />
-                  {group.name}
+                  <DataBarVertical20Regular style={{ color: '#a8c0e0', flexShrink: 0 }} />
+                  <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {item.name}
+                  </span>
                 </button>
-              );
-            },
-          }}
-        />
+              ))}
+            </div>
+          );
+        })}
       </div>
     );
   }

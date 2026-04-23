@@ -2,8 +2,7 @@ import * as React from 'react';
 import { IHelloWorldProps } from './IHelloWorldProps';
 import { PowerBIService, IPowerBIReport } from '../services/PowerBIService';
 import Header from './Header';
-import { Text } from 'office-ui-fabric-react/lib/Text';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import { FluentProvider, webLightTheme } from '@fluentui/react-components';
 import PowerBIViewer from './PowerBIViewer';
 import Sidebar, { ISidebarNavItem } from './Sidebar';
 import ReportPicker from './ReportPicker';
@@ -59,7 +58,7 @@ export default class HelloWorld extends React.Component<IHelloWorldProps, IHello
     const { activeKey, selectedReport } = this.state;
 
     return (
-      <Stack tokens={{ childrenGap: 0 }}>
+      <FluentProvider theme={webLightTheme}>
 
         <Header graphProfile={this.props.graphProfile} />
 
@@ -86,17 +85,17 @@ export default class HelloWorld extends React.Component<IHelloWorldProps, IHello
                 title={selectedReport.name}
               />
             ) : (
-              <Stack style={{ padding: '40px 24px' }} tokens={{ childrenGap: 8 }}>
-                <Text variant='xxLarge' block>{this.props.title}</Text>
-                <Text variant='large' style={{ color: '#605e5c' }}>
+              <div style={{ padding: '40px 24px' }}>
+                <h1 style={{ margin: '0 0 8px', fontSize: 28, fontWeight: 600 }}>{this.props.title}</h1>
+                <p style={{ margin: 0, fontSize: 16, color: '#605e5c' }}>
                   Seleccioná un reporte en el menú lateral para comenzar.
-                </Text>
-              </Stack>
+                </p>
+              </div>
             )}
           </main>
 
         </div>
-      </Stack>
+      </FluentProvider>
     );
   }
 }

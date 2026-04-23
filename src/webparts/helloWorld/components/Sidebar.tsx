@@ -1,13 +1,14 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { Persona, PersonaSize } from 'office-ui-fabric-react/lib/Persona';
+import {
+  Home20Regular,
+  Settings20Regular,
+  Navigation20Regular,
+  ArrowLeft20Regular,
+} from '@fluentui/react-icons';
+import { Avatar } from '@fluentui/react-components';
 import { IGraphUserProfile } from './IHelloWorldProps';
 import styles from './Sidebar.module.scss';
-
-// ---------------------------------------------------------------------------
-// Tipos públicos
-// ---------------------------------------------------------------------------
 
 export interface ISidebarNavItem {
   key: string;
@@ -24,9 +25,12 @@ export interface ISidebarProps {
   children?:     React.ReactNode;
 }
 
-// ---------------------------------------------------------------------------
-// Componente
-// ---------------------------------------------------------------------------
+const ICON_MAP: Record<string, React.ComponentType<React.SVGAttributes<SVGSVGElement>>> = {
+  'Home':            Home20Regular,
+  'Settings':        Settings20Regular,
+  'GlobalNavButton': Navigation20Regular,
+  'Back':            ArrowLeft20Regular,
+};
 
 const Sidebar: React.FC<ISidebarProps> = ({ graphProfile, topItems, bottomItems, activeKey, children }) => {
 
@@ -43,6 +47,7 @@ const Sidebar: React.FC<ISidebarProps> = ({ graphProfile, topItems, bottomItems,
       styles.navItem,
       isActive ? styles.navItemActive : '',
     ].join(' ');
+    const IconComponent = ICON_MAP[item.iconName];
 
     return (
       <li key={item.key} role="listitem">
@@ -53,13 +58,15 @@ const Sidebar: React.FC<ISidebarProps> = ({ graphProfile, topItems, bottomItems,
           aria-current={isActive ? 'page' : undefined}
         >
           <span className={styles.navIcon} aria-hidden="true">
-            <Icon iconName={item.iconName} />
+            {IconComponent && <IconComponent />}
           </span>
           <span className={styles.navLabel}>{item.label}</span>
         </button>
       </li>
     );
   };
+
+  const ToggleIcon = isCollapsed ? Navigation20Regular : ArrowLeft20Regular;
 
   return (
     <nav className={sidebarClass} aria-label="Navegación principal">
@@ -71,7 +78,7 @@ const Sidebar: React.FC<ISidebarProps> = ({ graphProfile, topItems, bottomItems,
         aria-label={isCollapsed ? 'Expandir menú' : 'Colapsar menú'}
         title={isCollapsed ? 'Expandir menú' : 'Colapsar menú'}
       >
-        <Icon iconName={isCollapsed ? 'GlobalNavButton' : 'Back'} />
+        <ToggleIcon />
       </button>
 
       {/* ── Ítems estáticos superiores (ej. Inicio) ── */}
@@ -93,20 +100,32 @@ const Sidebar: React.FC<ISidebarProps> = ({ graphProfile, topItems, bottomItems,
         </ul>
       )}
 
-      {/* ── Persona / Avatar al fondo ── */}
+      {/* ── Avatar al fondo ── */}
       <div className={styles.avatarSection}>
-        <Persona
-          text={graphProfile ? graphProfile.displayName : undefined}
-          secondaryText={graphProfile ? graphProfile.jobTitle : undefined}
-          size={isCollapsed ? PersonaSize.size32 : PersonaSize.size40}
-          hidePersonaDetails={isCollapsed}
-          title={graphProfile ? graphProfile.displayName : 'Cargando...'}
-          styles={{
-            root:          { overflow: 'hidden', maxWidth: '100%' },
-            primaryText:   { color: '#dce8fa' },
-            secondaryText: { color: '#a8c0e0' },
-          }}
+        <Avatar
+          name={graphProfile?.displayName ?? undefined}
+          size={isCollapsed ? 24 : 32}
+          color="colorful"
+          title={graphProfile?.displayName ?? 'Cargando...'}
         />
+        {!isCollapsed && graphProfile && (
+          <div style={{ overflow: 'hidden', marginLeft: 8 }}>
+            <div style={{
+              color: '#dce8fa', fontSize: 13, fontWeight: 600,
+              overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+            }}>
+              {graphProfile.displayName}
+            </div>
+            {graphProfile.jobTitle && (
+              <div style={{
+                color: '#a8c0e0', fontSize: 11,
+                overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+              }}>
+                {graphProfile.jobTitle}
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
     </nav>
