@@ -15,7 +15,9 @@ release/
 
 # === SPFx solution output ===
 sharepoint/solution/*.sppkg
+sharepoint/solution/*.zip
 sharepoint/solution/debug/
+sharepoint/solution/extracted/
 !sharepoint/solution/.gitkeep
 
 # === Heft / Rushstack ===

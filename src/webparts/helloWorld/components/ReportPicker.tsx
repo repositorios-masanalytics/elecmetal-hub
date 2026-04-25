@@ -1,11 +1,6 @@
 import * as React from 'react';
-import { Spinner } from '@fluentui/react-components';
-import {
-  DataBarVertical20Regular,
-  ErrorCircle20Regular,
-  ChevronRight20Regular,
-  ChevronDown20Regular,
-} from '@fluentui/react-icons';
+// DIAGNOSTIC: import { Spinner } from '@fluentui/react-components';
+// DIAGNOSTIC: import { DataBarVertical20Regular, ErrorCircle20Regular, ChevronRight20Regular, ChevronDown20Regular } from '@fluentui/react-icons';
 import {
   IPowerBIReport,
   IPowerBIGroup,
@@ -112,7 +107,7 @@ export default class ReportPicker extends React.Component<IReportPickerProps, IR
     if (status === 'loading') {
       return (
         <div style={{ padding: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
-          <Spinner size="tiny" />
+          <span style={{ fontSize: 13 }}>...</span>
           <span style={{ color: '#a8c0e0', fontSize: 13 }}>Cargando reportes...</span>
         </div>
       );
@@ -122,7 +117,7 @@ export default class ReportPicker extends React.Component<IReportPickerProps, IR
       return (
         <div style={{ padding: '12px 8px' }}>
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: 6, marginBottom: 8 }}>
-            <ErrorCircle20Regular style={{ color: '#ffa07a', marginTop: 2, flexShrink: 0 }} />
+            {/* DIAGNOSTIC: <ErrorCircle20Regular /> */}<span style={{ color: '#ffa07a', marginTop: 2, flexShrink: 0 }}>✕</span>
             <span style={{ color: '#ffa07a', fontSize: 13 }}>{errorMessage}</span>
           </div>
           {isConsentError && (
@@ -168,10 +163,8 @@ export default class ReportPicker extends React.Component<IReportPickerProps, IR
                   boxSizing:     'border-box' as 'border-box',
                 }}
               >
-                {group.isCollapsed
-                  ? <ChevronRight20Regular style={{ fontSize: 10 }} />
-                  : <ChevronDown20Regular style={{ fontSize: 10 }} />
-                }
+                {/* DIAGNOSTIC: ChevronRight/Down */}
+                <span style={{ fontSize: 10 }}>{group.isCollapsed ? '▶' : '▼'}</span>
                 {group.name}
               </button>
               {!group.isCollapsed && groupItems.map(item => (
@@ -194,7 +187,8 @@ export default class ReportPicker extends React.Component<IReportPickerProps, IR
                     boxSizing:  'border-box' as 'border-box',
                   }}
                 >
-                  <DataBarVertical20Regular style={{ color: '#a8c0e0', flexShrink: 0 }} />
+                  {/* DIAGNOSTIC: <DataBarVertical20Regular /> */}
+                  <span style={{ color: '#a8c0e0', flexShrink: 0 }}>▪</span>
                   <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {item.name}
                   </span>

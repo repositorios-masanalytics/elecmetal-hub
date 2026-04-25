@@ -8,8 +8,8 @@ import {
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import { MSGraphClientV3, AadHttpClientFactory, HttpClient } from '@microsoft/sp-http';
 
-import * as strings from 'HelloWorldWebPartStrings';
-import HelloWorld from './components/HelloWorld';
+import './_diag'; // DIAGNOSTIC checkpoint 2 — remove after debugging
+import HelloWorld from './components/HelloWorld'; // SCSS chain loads here
 import { IHelloWorldProps, IGraphUserProfile, EmbedMode } from './components/IHelloWorldProps';
 
 export interface IHelloWorldWebPartProps {
@@ -38,8 +38,6 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<IHelloWorld
     return super.onInit();
   }
 
-  // Oculta el chrome de SharePoint (header del sitio, nav, footer, command bar y márgenes
-  // del canvas) para que el webpart ocupe toda la pantalla como una app standalone.
   private _hideSharePointChrome(): void {
     if (document.getElementById('mas-hub-chrome-hide')) return;
 
@@ -82,7 +80,7 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<IHelloWorld
         httpClient:           this.context.httpClient as HttpClient,
         tenantId:             this.context.pageContext.aadInfo.tenantId.toString(),
         embedMode:            embedMode,
-        azureFunctionUrl:     this.properties.azureFunctionUrl || '',
+        azureFunctionUrl:     this.properties.azureFunctionUrl || 'http://localhost:7071',
       }
     );
 
@@ -97,23 +95,23 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<IHelloWorld
     return {
       pages: [
         {
-          header: { description: strings.PropertyPaneDescription },
+          header: { description: 'Configuración del Web Part' },
           groups: [
             {
-              groupName: strings.BasicGroupName,
+              groupName: 'General',
               groupFields: [
                 PropertyPaneTextField('title', {
-                  label: strings.TitleFieldLabel,
+                  label: 'Título del Web Part',
                 }),
                 PropertyPaneDropdown('embedMode', {
-                  label: strings.EmbedModeFieldLabel,
+                  label: 'Modo de embed',
                   options: [
-                    { key: 'user', text: strings.EmbedModeUser },
-                    { key: 'app',  text: strings.EmbedModeApp  },
+                    { key: 'user', text: 'User-Owns-Data (delegado)' },
+                    { key: 'app',  text: 'App-Owns-Data (Service Principal)' },
                   ],
                 }),
                 PropertyPaneTextField('azureFunctionUrl', {
-                  label:       strings.AzureFunctionUrlFieldLabel,
+                  label:       'URL de Azure Function (solo modo App)',
                   placeholder: 'http://localhost:7071',
                 }),
               ]
@@ -124,3 +122,6 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<IHelloWorld
     };
   }
 }
+
+// DIAGNOSTIC checkpoint 3 — remove after debugging
+try { console.log('[wp:3] AMD factory completed; HelloWorldWebPart class defined'); } catch (_e) { /* */ }

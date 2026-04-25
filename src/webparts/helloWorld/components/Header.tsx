@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Globe20Regular, QuestionCircle20Regular, Settings20Regular } from '@fluentui/react-icons';
+// DIAGNOSTIC: import { Globe20Regular, QuestionCircle20Regular, Settings20Regular } from '@fluentui/react-icons';
 import { IGraphUserProfile } from './IHelloWorldProps';
 
 export interface IHeaderProps {
@@ -25,7 +25,7 @@ const Header: React.FC<IHeaderProps> = ({ graphProfile }) => {
       boxSizing: 'border-box',
     }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '0 8px', height: '100%' }}>
-        <Globe20Regular style={{ color: '#c8d8f0' }} />
+        {/* DIAGNOSTIC: <Globe20Regular style={{ color: '#c8d8f0' }} /> */}
         <span style={{ color: '#ffffff', fontWeight: 700, fontSize: 15 }}>ME Elecmetal HUB</span>
       </div>
 
@@ -46,12 +46,12 @@ const Header: React.FC<IHeaderProps> = ({ graphProfile }) => {
       </div>
 
       <button style={BTN_STYLE}>
-        <QuestionCircle20Regular style={{ color: '#c8d8f0' }} />
+        {/* DIAGNOSTIC: <QuestionCircle20Regular /> */}
         <span>Ayuda</span>
       </button>
 
       <button style={BTN_STYLE}>
-        <Settings20Regular style={{ color: '#c8d8f0' }} />
+        {/* DIAGNOSTIC: <Settings20Regular /> */}
         <span>Configuración</span>
       </button>
     </header>

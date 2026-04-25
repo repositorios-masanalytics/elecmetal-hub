@@ -1,12 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
-import {
-  Home20Regular,
-  Settings20Regular,
-  Navigation20Regular,
-  ArrowLeft20Regular,
-} from '@fluentui/react-icons';
-import { Avatar } from '@fluentui/react-components';
+// DIAGNOSTIC: import { Home20Regular, Settings20Regular, Navigation20Regular, ArrowLeft20Regular } from '@fluentui/react-icons';
+// DIAGNOSTIC: import { Avatar } from '@fluentui/react-components';
 import { IGraphUserProfile } from './IHelloWorldProps';
 import styles from './Sidebar.module.scss';
 
@@ -25,12 +20,8 @@ export interface ISidebarProps {
   children?:     React.ReactNode;
 }
 
-const ICON_MAP: Record<string, React.ComponentType<React.SVGAttributes<SVGSVGElement>>> = {
-  'Home':            Home20Regular,
-  'Settings':        Settings20Regular,
-  'GlobalNavButton': Navigation20Regular,
-  'Back':            ArrowLeft20Regular,
-};
+// DIAGNOSTIC: icons removed
+const ICON_MAP: Record<string, React.ComponentType<React.SVGAttributes<SVGSVGElement>>> = {};
 
 const Sidebar: React.FC<ISidebarProps> = ({ graphProfile, topItems, bottomItems, activeKey, children }) => {
 
@@ -66,7 +57,7 @@ const Sidebar: React.FC<ISidebarProps> = ({ graphProfile, topItems, bottomItems,
     );
   };
 
-  const ToggleIcon = isCollapsed ? Navigation20Regular : ArrowLeft20Regular;
+  // DIAGNOSTIC: const ToggleIcon = isCollapsed ? Navigation20Regular : ArrowLeft20Regular;
 
   return (
     <nav className={sidebarClass} aria-label="Navegación principal">
@@ -78,7 +69,8 @@ const Sidebar: React.FC<ISidebarProps> = ({ graphProfile, topItems, bottomItems,
         aria-label={isCollapsed ? 'Expandir menú' : 'Colapsar menú'}
         title={isCollapsed ? 'Expandir menú' : 'Colapsar menú'}
       >
-        <ToggleIcon />
+        {/* DIAGNOSTIC: <ToggleIcon /> */}
+        <span>{isCollapsed ? '☰' : '←'}</span>
       </button>
 
       {/* ── Ítems estáticos superiores (ej. Inicio) ── */}
@@ -102,12 +94,7 @@ const Sidebar: React.FC<ISidebarProps> = ({ graphProfile, topItems, bottomItems,
 
       {/* ── Avatar al fondo ── */}
       <div className={styles.avatarSection}>
-        <Avatar
-          name={graphProfile?.displayName ?? undefined}
-          size={isCollapsed ? 24 : 32}
-          color="colorful"
-          title={graphProfile?.displayName ?? 'Cargando...'}
-        />
+        <div style={{ width: isCollapsed ? 24 : 32, height: isCollapsed ? 24 : 32, borderRadius: '50%', background: '#3a5a8b' }} title={graphProfile?.displayName ?? 'Cargando...'} />
         {!isCollapsed && graphProfile && (
           <div style={{ overflow: 'hidden', marginLeft: 8 }}>
             <div style={{

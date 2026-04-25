@@ -3,31 +3,20 @@ import { IHelloWorldProps } from './IHelloWorldProps';
 import { PowerBIService, IPowerBIReport } from '../services/PowerBIService';
 import { EmbedTokenService, IPowerBIDataService } from '../services/EmbedTokenService';
 import Header from './Header';
-import { FluentProvider, webLightTheme } from '@fluentui/react-components';
+// DIAGNOSTIC: @fluentui/react-components removed to isolate AMD init throw
+// import { FluentProvider, webLightTheme } from '@fluentui/react-components';
 import PowerBIViewer from './PowerBIViewer';
 import Sidebar, { ISidebarNavItem } from './Sidebar';
 import ReportPicker from './ReportPicker';
 import styles from './Sidebar.module.scss';
-
-// ---------------------------------------------------------------------------
-// Estado
-// ---------------------------------------------------------------------------
 
 interface IHelloWorldState {
   activeKey:      string;
   selectedReport: IPowerBIReport | undefined;
 }
 
-// ---------------------------------------------------------------------------
-// Items de navegación estáticos
-// ---------------------------------------------------------------------------
-
 const NAV_TOP: ISidebarNavItem[]    = [{ key: 'home',     label: 'Inicio',         iconName: 'Home'     }];
 const NAV_BOTTOM: ISidebarNavItem[] = [{ key: 'settings', label: 'Configuración',  iconName: 'Settings' }];
-
-// ---------------------------------------------------------------------------
-// Componente
-// ---------------------------------------------------------------------------
 
 export default class HelloWorld extends React.Component<IHelloWorldProps, IHelloWorldState> {
 
@@ -68,7 +57,7 @@ export default class HelloWorld extends React.Component<IHelloWorldProps, IHello
     const { activeKey, selectedReport } = this.state;
 
     return (
-      <FluentProvider theme={webLightTheme}>
+      <div>
 
         <Header graphProfile={this.props.graphProfile} />
 
@@ -108,7 +97,7 @@ export default class HelloWorld extends React.Component<IHelloWorldProps, IHello
           </main>
 
         </div>
-      </FluentProvider>
+      </div>
     );
   }
 }
